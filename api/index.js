@@ -1,17 +1,23 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import connectDB from './db/mongoose.js';
-import authRoutes from './routes/auth.js';
-import donationRoutes from './routes/donations.js';
-import inventoryRoutes from './routes/inventory.js';
-import requestRoutes from './routes/requests.js';
-import adminRoutes from './routes/admin.js';
-
-// Connect to MongoDB
-connectDB();
+import connectDB from '../server/db/mongoose.js';
+import authRoutes from '../server/routes/auth.js';
+import donationRoutes from '../server/routes/donations.js';
+import inventoryRoutes from '../server/routes/inventory.js';
+import requestRoutes from '../server/routes/requests.js';
+import adminRoutes from '../server/routes/admin.js';
 
 const app = express();
+
+// Connect to MongoDB (cached for serverless)
+let isConnected = false;
+const ensureConnected = async () => {
+  if (!isConnected) {
+    await connectDB();
+    isConnected = true;
+  }
+};
 
 // Middleware
 app.use(cors({
@@ -32,7 +38,7 @@ app.use('/api/requests', requestRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Health check
-app.get('/api/health', (req, res) => res.json({ status: 'OK', message: 'MRRS API is running.' }));
+app.get('/api/health', (req, res) => res.json({ status: 'OK', message: 'MRRS API is running on Vercel.' }));
 
 // 404 fallback
 app.use((req, res) => res.status(404).json({ message: `Route ${req.originalUrl} not found.` }));
@@ -43,7 +49,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Internal server error.' });
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 MRRS API Server running on http://localhost:${PORT}`);
-});
+// Vercel serverless handler
+export default async (req, res) => {
+  await ensureConnected();
+  app(req, res);
+};
