@@ -59,6 +59,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  padding-bottom: 70px; /* Space for the floating demo bar */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -835,6 +836,68 @@ a:hover {
   gap: 12px;
 }
 
+/* Demo Switcher Fixed Panel */
+.demo-switcher-panel {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(15, 108, 189, 0.15);
+  padding: 10px 20px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 10px 30px rgba(15, 108, 189, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.demo-title {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--primary-color);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.demo-roles {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-demo-role {
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.btn-demo-role.active {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-demo-role:not(.active) {
+  background-color: #FFF;
+  color: var(--text-muted);
+  border-color: var(--border-color);
+}
+
+.btn-demo-role:not(.active):hover {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+
 
 
 /* Search Filters Layout */
@@ -1150,5 +1213,10 @@ a:hover {
   .contact-section-grid {
     grid-template-columns: 1fr;
   }
-
+  .demo-switcher-panel {
+    width: 90%;
+    overflow-x: auto;
+    padding: 8px 12px;
+    justify-content: flex-start;
+  }
 }

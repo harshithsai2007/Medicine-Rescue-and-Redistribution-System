@@ -11,6 +11,7 @@ let currentUser = null;
 // Initialize App
 document.addEventListener("DOMContentLoaded", () => {
   restoreSession();
+  setupDemoSwitcher();
   setupNavigation();
   setupRouter();
   handleRoute();
@@ -72,6 +73,7 @@ function handleRoute() {
   const contentArea = document.getElementById("app-content");
 
   window.updateNavbarState?.();
+  updateDemoSwitcherActiveBtn();
 
   if (hash === "dashboard" && !currentUser) {
     navigateTo("login");
@@ -500,4 +502,45 @@ function handleLogout() {
   showToast("Logged out successfully.", "info");
   navigateTo("home");
   window.updateNavbarState?.();
+}
+
+// ── Demo Role Switcher ────────────────────────────────────────────────────────
+function setupDemoSwitcher() {
+  const panel = document.createElement("div");
+  panel.className = "demo-switcher-panel";
+  panel.innerHTML = `
+    <span class="demo-title">Role Switcher:</span>
+    <div class="demo-roles">
+      <button class="btn-demo-role" data-email="donor@mrrs.org"    data-role="donor">Donor</button>
+      <button class="btn-demo-role" data-email="verifier@mrrs.org" data-role="verifier">Verifier</button>
+      <button class="btn-demo-role" data-email="charity@mrrs.org"  data-role="charity">Charity NGO</button>
+      <button class="btn-demo-role" data-email="admin@mrrs.org"    data-role="admin">Admin</button>
+      <button class="btn-demo-role" id="demo-logout-btn" style="background-color:var(--danger-light);color:var(--danger-color);border:none;">Logout</button>
+    </div>
+  `;
+  document.body.appendChild(panel);
+
+  panel.querySelectorAll(".btn-demo-role:not(#demo-logout-btn)").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      if (currentUser?.email === btn.dataset.email) return;
+      try {
+        apiLogout();
+        const user = await apiLogin(btn.dataset.email, "password");
+        currentUser = user;
+        window.updateNavbarState?.();
+        showToast(`Switched to ${user.name} (${btn.dataset.role})`, "success");
+        navigateTo("dashboard");
+      } catch (err) {
+        showToast("Failed to switch role: " + err.message, "error");
+      }
+    });
+  });
+
+  document.getElementById("demo-logout-btn")?.addEventListener("click", handleLogout);
+}
+
+function updateDemoSwitcherActiveBtn() {
+  document.querySelectorAll(".btn-demo-role").forEach(btn => {
+    btn.classList.toggle("active", currentUser?.email === btn.dataset.email);
+  });
 }
