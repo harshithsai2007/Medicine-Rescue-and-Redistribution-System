@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medicine Rescue and Redistribution System</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Reduce medicine waste by donating unused, unopened, and unexpired medicines to verified charity hospitals, NGOs, and medical camps. Distributed 100% free.">
+  <meta name="keywords" content="medicine donation, medicine waste, charity hospital, health NGO, free medicine, medical camp">
+  <meta name="author" content="MRRS Team">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230F6CBD' stroke-width='2.5'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <!-- Navigation Header -->
+  <header id="app-header">
+    <div class="nav-container">
+      <div class="logo" style="cursor: pointer;" id="nav-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shield">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>MRRS</span>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <!-- Populated dynamically by app.js -->
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Dynamic Page Injector Container -->
+  <main id="app-content">
+    <!-- Populated dynamically by app.js router -->
+    <div style="display: flex; justify-content: center; align-items: center; min-height: 50vh;">
+      <p style="color: var(--text-muted); font-size: 1.1rem; font-weight: 500;">Loading Medicine Rescue System...</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer id="app-footer">
+    <div class="footer-content">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shield">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>Medicine Rescue and Redistribution System</span>
+      </div>
+      <ul class="footer-nav">
+        <li id="footer-link-home">Home</li>
+        <li id="footer-link-about">About Us</li>
+        <li id="footer-link-how">How It Works</li>
+        <li id="footer-link-charities">Charity Partners</li>
+        <li id="footer-link-contact">Contact Us</li>
+      </ul>
+      <p class="footer-copy">© 2026 Medicine Rescue and Redistribution System. All rights reserved. Medicines are redistributed 100% free of cost.</p>
+    </div>
+  </footer>
+
+  <!-- Entry Script Module -->
+  <script type="module" src="/js/app.js"></script>
+  
+  <!-- Direct Bind helper script for static elements -->
+  <script type="module">
+    import { navigateTo } from '/js/app.js';
+    
+    document.getElementById("nav-logo").addEventListener("click", () => navigateTo("home"));
+    document.getElementById("footer-link-home").addEventListener("click", () => navigateTo("home"));
+    document.getElementById("footer-link-about").addEventListener("click", () => navigateTo("about"));
+    document.getElementById("footer-link-how").addEventListener("click", () => navigateTo("how-it-works"));
+    document.getElementById("footer-link-charities").addEventListener("click", () => navigateTo("charities"));
+    document.getElementById("footer-link-contact").addEventListener("click", () => navigateTo("contact"));
+  </script>
+</body>
+</html>
