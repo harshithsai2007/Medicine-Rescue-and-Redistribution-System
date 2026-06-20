@@ -10,7 +10,7 @@ import adminRoutes from '../server/routes/admin.js';
 
 const app = express();
 
-// Connect to MongoDB (cached for serverless)
+// DB connection caching for serverless environments
 let isConnected = false;
 const ensureConnected = async () => {
   if (!isConnected) {
@@ -30,7 +30,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Routes
+// Routes — Vercel forwards the full /api/... path to this function
 app.use('/api/auth', authRoutes);
 app.use('/api/donations', donationRoutes);
 app.use('/api/inventory', inventoryRoutes);
@@ -49,8 +49,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Internal server error.' });
 });
 
-// Vercel serverless handler
+// Vercel serverless export
 export default async (req, res) => {
   await ensureConnected();
-  app(req, res);
+  return app(req, res);
 };
