@@ -345,6 +345,13 @@ function renderLogin(container) {
   const emailInput = container.querySelector("#login-email");
   const passInput  = container.querySelector("#login-pass");
 
+  if (window.demoPreFillEmail) {
+    emailInput.value = window.demoPreFillEmail;
+    passInput.value  = "password";
+    passInput.focus();
+    window.demoPreFillEmail = null;
+  }
+
   container.querySelector("#login-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const btn = container.querySelector("#login-submit-btn");
@@ -521,18 +528,12 @@ function setupDemoSwitcher() {
   document.body.appendChild(panel);
 
   panel.querySelectorAll(".btn-demo-role:not(#demo-logout-btn)").forEach(btn => {
-    btn.addEventListener("click", async () => {
+    btn.addEventListener("click", () => {
       if (currentUser?.email === btn.dataset.email) return;
-      try {
-        apiLogout();
-        const user = await apiLogin(btn.dataset.email, "password");
-        currentUser = user;
-        window.updateNavbarState?.();
-        showToast(`Switched to ${user.name} (${btn.dataset.role})`, "success");
-        navigateTo("dashboard");
-      } catch (err) {
-        showToast("Failed to switch role: " + err.message, "error");
-      }
+      apiLogout();
+      currentUser = null;
+      window.demoPreFillEmail = btn.dataset.email;
+      navigateTo("login");
     });
   });
 
